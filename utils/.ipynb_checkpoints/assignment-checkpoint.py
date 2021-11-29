@@ -20,6 +20,28 @@ CUDA = format_cuda_version(CUDA_version)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+def lengths_to_idx(lengths):
+    """
+    [1, 2] into [0, 1, 1]
+    """
+    idx = []
+    for i, length in enumerate(lengths):
+        idx += [i] * length
+    return torch.LongTensor(idx).to(device)
+
+def expand_by_lengths(x, lengths):
+    """
+    Args:
+        x: (bs, d)
+        lengths: (bs, )
+    Returns: (n*t, d)
+    """
+    # (n*t, )
+    idx = lengths_to_idx(lengths)
+    # (n*t, d)
+    out = x[idx]
+    return out
+
 def chunk_pad_by_lengths(x, lengths, batch_first = True):
     """
     Zero padding

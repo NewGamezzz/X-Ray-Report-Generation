@@ -9,3 +9,5 @@ sentence-transformers
 tensorboard==2.2
 scipy
 torch-summary
+nlu==3.0
+tokenizers
